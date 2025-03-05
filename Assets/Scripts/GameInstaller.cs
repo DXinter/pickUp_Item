@@ -7,7 +7,6 @@ public class GameInstaller : MonoInstaller
     {
         Container.Bind<PlayerControls>().AsSingle().NonLazy();
         Container.Bind<PlayerController>().FromComponentInHierarchy().AsSingle();
-        //Container.Bind<ItemPickup>().FromComponentInHierarchy().AsSingle();
     }
 }
 
