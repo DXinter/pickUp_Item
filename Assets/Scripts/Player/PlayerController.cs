@@ -12,35 +12,38 @@ namespace Player
 
         [SerializeField] private Joystick joystick;
 
-        private Vector2 moveInput;
-        private Vector2 lookInput;
-        private float xRotation = 0f;
+        [SerializeField] private Transform cameraTransform;
 
-        private PlayerControls controls;
-
+        private Vector2 _moveInput;
+        private Vector2 _lookInput;
+        private float _xRotation;
+        private PlayerControls _controls;
+        
         private void Awake()
         {
-            controls = new PlayerControls();
+            _controls = new PlayerControls();
 
-            controls.Gameplay.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
-            controls.Gameplay.Move.canceled += _ => moveInput = Vector2.zero;
+            _controls.Gameplay.Move.performed += ctx => _moveInput = ctx.ReadValue<Vector2>();
+            _controls.Gameplay.Move.canceled += _ => _moveInput = Vector2.zero;
 
-            controls.Gameplay.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
-            controls.Gameplay.Look.canceled += _ => lookInput = Vector2.zero;
+            _controls.Gameplay.Look.performed += ctx => _lookInput = ctx.ReadValue<Vector2>();
+            _controls.Gameplay.Look.canceled += _ => _lookInput = Vector2.zero;
         }
 
-        private void OnEnable() => controls.Gameplay.Enable();
-        private void OnDisable() => controls.Gameplay.Disable();
+        private void OnEnable() => _controls.Gameplay.Enable();
+        private void OnDisable() => _controls.Gameplay.Disable();
 
         private void Update()
         {
-            moveInput = new Vector2(joystick.Horizontal, joystick.Vertical);
-            var move = transform.right * moveInput.x + transform.forward * moveInput.y;
+            _moveInput = new Vector2(joystick.Horizontal, joystick.Vertical);
+            var move = transform.right * _moveInput.x + transform.forward * _moveInput.y;
             controller.Move(move * moveSpeed * Time.deltaTime);
 
-            xRotation -= lookInput.y * lookSensitivity;
-            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-            transform.Rotate(Vector3.up * lookInput.x * lookSensitivity);
+            transform.Rotate(Vector3.up * _lookInput.x * lookSensitivity);
+
+            _xRotation -= _lookInput.y * lookSensitivity;
+            _xRotation = Mathf.Clamp(_xRotation, -80f, 80f);
+            cameraTransform.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
         }
     }
 }
