@@ -33,14 +33,6 @@ namespace Player
             _controls.Gameplay.Disable();
         }
 
-        private void Update()
-        {
-            if (Mouse.current.leftButton.wasPressedThisFrame)
-            {
-                //TryPickUpByClick();
-            }
-        }
-
         private void TryPickupItem()
         {
             if (_heldItem != null) return;
@@ -55,20 +47,6 @@ namespace Player
                 }
             }
         }
-
-        /*void TryPickUpByClick()
-        {
-            if (_heldItem != null) return; // Уже держим предмет
-
-            var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-            if (Physics.Raycast(ray, out RaycastHit hit, 10f))
-            {
-                if (hit.collider.gameObject.TryGetComponent<Item>(out var item))
-                {
-                    PickupItem(item);
-                }
-            }
-        }*/
 
         private void PickupItem(Item item)
         {
